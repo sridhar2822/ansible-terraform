@@ -1,1 +1,47 @@
+---
+- name: Update all packages
+  yum:
+    name: "*"
+    state: latest
 
+- name: Import Corretto GPG key
+  rpm_key:
+    state: present
+    key: https://yum.corretto.aws/corretto.key
+
+- name: Add Corretto repository
+  get_url:
+    url: https://yum.corretto.aws/corretto.repo
+    dest: /etc/yum.repos.d/corretto.repo
+
+- name: Install common packages
+  yum:
+    name:
+      - git
+      - curl
+      - wget
+      - unzip
+      - java-21-amazon-corretto-devel
+    state: present
+
+- name: Install Docker
+  yum:
+    name: docker
+    state: present
+
+- name: Install Python requests module
+  yum:
+    name: python3-requests
+    state: present
+
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add ec2-user to docker group
+  user:
+    name: ec2-user
+    groups: docker
+    append: yes

@@ -1,0 +1,18 @@
+---
+# DevOps Infrastructure Playbook
+# EC2-1 (Jenkins Server)   → Jenkins on port 8080
+# EC2-2 (SonarQube Server) → SonarQube on port 9000
+
+- name: Setup Jenkins Server
+  hosts: jenkins_server
+  become: yes
+  roles:
+    - common
+    - jenkins
+
+- name: Setup SonarQube Server
+  hosts: sonarqube_server
+  become: yes
+  roles:
+    - common
+    - sonarqube
